@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { formatDistance } from 'date-fns';
 
 import { useAuth } from '../store/StateProvider';

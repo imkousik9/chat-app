@@ -14,7 +14,7 @@ Frontend Code -> [https://github.com/imkousik9/chat-app](https://github.com/imko
 <br>
 Backend Code -> [https://github.com/imkousik9/chat-app-server](https://github.com/imkousik9/chat-app-server)
 <br>
-Deployed URL -> [https://tour-app-pi.vercel.app](https://tour-app-pi.vercel.app)
+Deployed URL -> [https://keen-nightingale-5e12fb.netlify.app](https://keen-nightingale-5e12fb.netlify.app)
 <br>
 API Docs -> https://chat-kousik-server.herokuapp.com/graphql
 
