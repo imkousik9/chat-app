@@ -15,9 +15,15 @@
 }
 
 .login__container > button {
-  margin-top: 50px;
+  margin-top: 10px;
   background-color: #6a1b4d !important;
   color: white;
+}
+
+.login__container > p {
+  color: red;
+  text-align: center;
+  font-weight: 600;
 }
 
 .login__link {

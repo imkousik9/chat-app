@@ -18,6 +18,7 @@ import './Sidebar.css';
 
 function Sidebar() {
   const [rooms, setRooms] = useState([]);
+
   const [{ user }, dispatch] = useAuth();
 
   const history = useHistory();

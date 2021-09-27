@@ -16,13 +16,13 @@ function App() {
   useQuery(USER, {
     onError: (err) => console.log(err),
     onCompleted(data) {
-      const meData = {
+      const user = {
         email: data?.user.email,
         name: data?.user.name
       };
       dispatch({
         type: 'SET_USER',
-        user: meData
+        user: user
       });
     }
   });
@@ -30,26 +30,27 @@ function App() {
   return (
     <div className="app">
       <Router>
-        <Switch>
-          {isAuthenticated ? (
-            <div className="app__body">
-              <Sidebar />
+        {isAuthenticated ? (
+          <div className="app__body">
+            <Sidebar />
+            <Switch>
               <Route path="/room/:roomId">
                 <Chat />
               </Route>
-              {/* <Route path="/"><Chat /></Route> */}
-            </div>
-          ) : (
-            <>
+            </Switch>
+          </div>
+        ) : (
+          <>
+            <Switch>
               <Route path="/register" exact>
                 <SignUp />
               </Route>
               <Route path="/" exact>
                 <Login />
               </Route>
-            </>
-          )}
-        </Switch>
+            </Switch>
+          </>
+        )}
       </Router>
     </div>
   );

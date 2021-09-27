@@ -15,12 +15,18 @@
 }
 
 .signUp__container > button {
-  margin-top: 30px;
+  margin-top: 10px;
   background-color: #6a1b4d !important;
   color: white;
 }
 
-.signUp_link {
+.signUp__container > p {
+  color: red;
+  text-align: center;
+  font-weight: 600;
+}
+
+.signUp__link {
   margin-top: 10px;
   text-align: center;
   font-weight: 600;

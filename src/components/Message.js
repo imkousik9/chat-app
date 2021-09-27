@@ -10,12 +10,12 @@ const Message = ({ message }) => {
   return (
     <p
       className={`message ${
-        message?.user.name === user.name ? 'message__receiver' : ''
+        message?.user.email === user.email ? 'message__receiver' : ''
       } `}
     >
       <span
         className={`message__name ${
-          message?.user.name === user.name ? 'message__name--none' : ''
+          message?.user.email === user.email ? 'message__name--none' : ''
         }`}
       >
         {message?.user.name}

@@ -25,6 +25,10 @@ export const NEW_MESSAGE = gql`
       createdAt
       user {
         name
+        email
+      }
+      room {
+        id
       }
     }
   }

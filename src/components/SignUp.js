@@ -12,26 +12,37 @@ function SignUp() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const history = useHistory();
   const [, dispatch] = useAuth();
 
-  const [signUpUser] = useMutation(REGISTER_USER);
+  const [signUpUser, { loading }] = useMutation(REGISTER_USER);
 
   const signIn = async (e) => {
     e.preventDefault();
 
     const { data } = await signUpUser({ variables: { name, email, password } });
-    const registerData = {
-      email: data?.register.email,
-      name: data?.register.name,
-      token: data?.register.token
-    };
-    dispatch({
-      type: 'REGISTER_SUCCESS',
-      user: registerData
-    });
-    history.push('/');
+
+    if (data.register.user) {
+      const registerData = {
+        email: data?.register.user.email,
+        name: data?.register.user.name,
+        token: data?.register.user.token
+      };
+
+      dispatch({
+        type: 'REGISTER_SUCCESS',
+        user: registerData
+      });
+      history.push('/');
+    } else if (data.register.errors) {
+      setError(data.register.errors[0].message);
+
+      dispatch({
+        type: 'REGISTER_FAIL'
+      });
+    }
   };
 
   return (
@@ -65,7 +76,10 @@ function SignUp() {
           fullWidth
           variant="outlined"
         />
-        <Button type="submit">Sign up</Button>
+        <p>{error}</p>
+        <Button type="submit" disabled={loading}>
+          Sign up
+        </Button>
       </form>
       <p className="signUp__link">
         Already have account? <Link to="/">Sign In</Link>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
 import { Button, TextField } from '@material-ui/core';
@@ -11,26 +11,35 @@ import './Login.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const history = useHistory();
   const [, dispatch] = useAuth();
 
-  const [logInUser] = useMutation(LOGIN_USER);
+  const [logInUser, { loading }] = useMutation(LOGIN_USER);
 
   const signIn = async (e) => {
     e.preventDefault();
 
     const { data } = await logInUser({ variables: { email, password } });
-    const loginData = {
-      email: data?.login.email,
-      name: data?.login.name,
-      token: data?.login.token
-    };
-    dispatch({
-      type: 'LOGIN_SUCCESS',
-      user: loginData
-    });
-    history.push('/');
+
+    if (data.login.user) {
+      const loginData = {
+        email: data?.login.user.email,
+        name: data?.login.user.name,
+        token: data?.login.user.token
+      };
+
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        user: loginData
+      });
+    } else if (data.login.errors) {
+      setError(data.login.errors[0].message);
+
+      dispatch({
+        type: 'LOGIN_FAIL'
+      });
+    }
   };
 
   return (
@@ -55,7 +64,10 @@ function Login() {
           fullWidth
           variant="outlined"
         />
-        <Button type="submit">Sign in</Button>
+        <p>{error}</p>
+        <Button type="submit" disabled={loading}>
+          Sign in
+        </Button>
       </form>
       <p className="login__link">
         New User? <Link to="/register">Register</Link>
