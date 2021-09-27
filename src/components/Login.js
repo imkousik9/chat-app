@@ -15,7 +15,7 @@ function Login() {
   const history = useHistory();
   const [, dispatch] = useAuth();
 
-  const [logInUser, { loading, error }] = useMutation(LOGIN_USER);
+  const [logInUser] = useMutation(LOGIN_USER);
 
   const signIn = async (e) => {
     e.preventDefault();

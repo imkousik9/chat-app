@@ -16,7 +16,7 @@ function SignUp() {
   const history = useHistory();
   const [, dispatch] = useAuth();
 
-  const [signUpUser, { loading, error }] = useMutation(REGISTER_USER);
+  const [signUpUser] = useMutation(REGISTER_USER);
 
   const signIn = async (e) => {
     e.preventDefault();
