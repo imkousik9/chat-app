@@ -20,7 +20,6 @@ function Sidebar() {
   const [rooms, setRooms] = useState([]);
 
   const [{ user }, dispatch] = useAuth();
-
   const history = useHistory();
 
   const [addRoom] = useMutation(CREATE_ROOM);
@@ -56,8 +55,15 @@ function Sidebar() {
   return (
     <div className="sidebar">
       <div className="sidebar__header">
-        <Avatar alt={user?.name} src={user?.photoURL} />
+        <Avatar
+          alt={user?.name}
+          src={`https://avatars.dicebear.com/api/bottts/${user?.name}.svg`}
+        />
+
         <div className="sidebar__headerRight">
+          <IconButton>
+            <SearchOutlinedIcon />
+          </IconButton>
           <IconButton onClick={createRoom}>
             <AddCircleOutlineRoundedIcon />
           </IconButton>
@@ -71,12 +77,7 @@ function Sidebar() {
           </IconButton>
         </div>
       </div>
-      <div className="sidebar__search">
-        <div className="sidebar__searchContainer">
-          <SearchOutlinedIcon />
-          <input placeholder="Search or start new chat" type="text" />
-        </div>
-      </div>
+
       <div className="sidebar__chats">
         {rooms.map((room) => (
           <SidebarChat key={room.id} id={room.id} name={room.name} />

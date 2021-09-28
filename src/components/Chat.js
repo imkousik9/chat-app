@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
@@ -17,7 +17,6 @@ import MicIcon from '@material-ui/icons/Mic';
 import './Chat.css';
 
 function Chat() {
-  const [seed, setSeed] = useState('');
   const [input, setInput] = useState('');
   const [roomName, setRoomName] = useState('');
   const [messages, setMessages] = useState([]);
@@ -27,10 +26,6 @@ function Chat() {
 
   const { roomId } = useParams();
   const history = useHistory();
-
-  useEffect(() => {
-    setSeed(Math.floor(Math.random() * 5000));
-  }, [roomId]);
 
   useQuery(ROOM, {
     variables: { id: roomId },
@@ -77,7 +72,7 @@ function Chat() {
   return (
     <div className="chat">
       <div className="chat__header">
-        <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
+        <Avatar src={`https://avatars.dicebear.com/api/human/${roomId}.svg`} />
         <div className="chat__headerInfo">
           <h3>{roomName}</h3>
           <p>

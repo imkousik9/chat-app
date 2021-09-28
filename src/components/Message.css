@@ -3,18 +3,18 @@
   flex-direction: column;
   font-size: 18px;
   text-align: left;
-  padding: 20px;
+  padding: 10px 20px;
   margin: 30px;
   background-color: white;
   width: fit-content;
   border-radius: 10px;
+  max-width: 30vw;
 }
 
 .message__receiver {
-  text-align: right;
   margin-left: auto;
   background-color: #6a1b4d;
-  color: #fff;
+  color: whitesmoke;
 }
 
 .message__name {
@@ -32,5 +32,5 @@
 .message__timestamp {
   text-align: right;
   margin-top: 10px;
-  font-size: xx-small;
+  font-size: x-small;
 }
