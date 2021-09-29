@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
-import { GET_MESSAGES, ROOM } from '../graphql/queries';
+import { GET_MESSAGES } from '../graphql/queries';
 import { DELETE_ROOM, SEND_MESSAGE } from '../graphql/mutations';
 import { NEW_MESSAGE } from '../graphql/subscriptions';
 import ScrollToBottom from 'react-scroll-to-bottom';
@@ -18,22 +18,14 @@ import './Chat.css';
 
 function Chat() {
   const [input, setInput] = useState('');
-  const [roomName, setRoomName] = useState('');
+
   const [messages, setMessages] = useState([]);
 
   const [addMessage] = useMutation(SEND_MESSAGE);
   const [deleteRoom] = useMutation(DELETE_ROOM);
 
-  const { roomId } = useParams();
+  const { roomId, roomName } = useParams();
   const history = useHistory();
-
-  useQuery(ROOM, {
-    variables: { id: roomId },
-    onError: (err) => console.log(err),
-    onCompleted(data) {
-      setRoomName(data?.room.name);
-    }
-  });
 
   useQuery(GET_MESSAGES, {
     variables: { id: roomId },

@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useSubscription } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 
 import { useAuth } from '../store/StateProvider';
 import { ROOMS } from '../graphql/queries';
 import { NEW_ROOM, DELETE_ROOM } from '../graphql/subscriptions';
-import { CREATE_ROOM } from '../graphql/mutations';
 
 import { useHistory } from 'react-router-dom';
 
@@ -16,13 +15,11 @@ import SidebarChat from './SidebarChat';
 
 import './Sidebar.css';
 
-function Sidebar() {
+function Sidebar({ setOpen }) {
   const [rooms, setRooms] = useState([]);
 
   const [{ user }, dispatch] = useAuth();
   const history = useHistory();
-
-  const [addRoom] = useMutation(CREATE_ROOM);
 
   useQuery(ROOMS, {
     onError: (err) => console.log(err),
@@ -44,14 +41,6 @@ function Sidebar() {
     }
   });
 
-  const createRoom = async () => {
-    const roomName = prompt('Please enter name for chat');
-
-    if (roomName) {
-      await addRoom({ variables: { name: roomName } });
-    }
-  };
-
   return (
     <div className="sidebar">
       <div className="sidebar__header">
@@ -64,7 +53,7 @@ function Sidebar() {
           <IconButton>
             <SearchOutlinedIcon />
           </IconButton>
-          <IconButton onClick={createRoom}>
+          <IconButton onClick={() => setOpen(true)}>
             <AddCircleOutlineRoundedIcon />
           </IconButton>
           <IconButton

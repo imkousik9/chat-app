@@ -18,7 +18,7 @@ export const DELETE_ROOM = gql`
 `;
 
 export const NEW_MESSAGE = gql`
-  subscription newMessage {
+  subscription NewMessage {
     newMessage {
       id
       message

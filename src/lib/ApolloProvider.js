@@ -17,12 +17,7 @@ let httpLink = createHttpLink({
 const wsLink = new WebSocketLink({
   uri: `wss://${process.env.REACT_APP_SERVER_URL}`,
   options: {
-    reconnect: true,
-    connectionParams: {
-      authToken: localStorage.getItem('token')
-        ? `Bearer ${localStorage.getItem('token')}`
-        : ''
-    }
+    reconnect: true
   }
 });
 

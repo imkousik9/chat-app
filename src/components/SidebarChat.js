@@ -37,7 +37,7 @@ function SidebarChat({ id, name }) {
   }
 
   return (
-    <Link to={`/room/${id}`}>
+    <Link to={`/room/${id}/${name}`}>
       <div className="sidebarChat">
         <Avatar src={`https://avatars.dicebear.com/api/human/${id}.svg`} />
         <div className="sidebarChat__info">
@@ -50,7 +50,10 @@ function SidebarChat({ id, name }) {
             {+messages[messages?.length - 1]?.createdAt
               ? `Last Active: ${formatDistance(
                   new Date(+messages[messages?.length - 1]?.createdAt),
-                  Date.now()
+                  Date.now(),
+                  {
+                    addSuffix: true
+                  }
                 )}`
               : ''}
           </p>
