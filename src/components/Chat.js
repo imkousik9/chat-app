@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
 import { useMutation } from '@apollo/client';
 import useRoom from '../lib/hooks/useRoom';
 import useMessages from '../lib/hooks/useMessages';
 import { DELETE_ROOM, SEND_MESSAGE } from '../graphql/mutations';
-import ScrollToBottom from 'react-scroll-to-bottom';
 import { useAuth } from '../store/StateProvider';
 
 import Message from './Message';
@@ -19,6 +18,11 @@ import './Chat.css';
 
 function Chat() {
   const [input, setInput] = useState('');
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behaviour: 'smooth' });
+  });
 
   const [addMessage] = useMutation(SEND_MESSAGE, {
     onError: (err) => console.log(err)
@@ -47,7 +51,10 @@ function Chat() {
 
     if (roomId) {
       await addMessage({
-        variables: { message: input, roomId: roomId }
+        variables: { message: input, roomId: roomId },
+        update: (cache) => {
+          cache.evict('');
+        }
       });
     }
 
@@ -89,11 +96,14 @@ function Chat() {
           )}
         </div>
       </div>
-      <ScrollToBottom className="chat__body">
+
+      <div className="chat__body">
         {messages.map((message) => (
           <Message key={message?.id} message={message} />
         ))}
-      </ScrollToBottom>
+        <div ref={scrollRef} />
+      </div>
+
       <div className="chat__footer">
         <InsertEmoticonIcon />
         <form onSubmit={handleSubmit}>
