@@ -1,10 +1,5 @@
-import { useState } from 'react';
-import { useQuery, useSubscription } from '@apollo/client';
-
 import { useAuth } from '../store/StateProvider';
-import { ROOMS } from '../graphql/queries';
-import { NEW_ROOM, DELETE_ROOM } from '../graphql/subscriptions';
-
+import useRooms from '../lib/hooks/useRooms';
 import { useHistory } from 'react-router-dom';
 
 import { Avatar, IconButton } from '@material-ui/core';
@@ -16,30 +11,10 @@ import SidebarChat from './SidebarChat';
 import './Sidebar.css';
 
 function Sidebar({ setOpen }) {
-  const [rooms, setRooms] = useState([]);
-
   const [{ user }, dispatch] = useAuth();
   const history = useHistory();
 
-  useQuery(ROOMS, {
-    onError: (err) => console.log(err),
-    onCompleted(data) {
-      setRooms(data?.rooms);
-    }
-  });
-
-  useSubscription(NEW_ROOM, {
-    onSubscriptionData({ subscriptionData: { data } }) {
-      setRooms([...rooms, data?.newRoom]);
-    }
-  });
-
-  useSubscription(DELETE_ROOM, {
-    onSubscriptionData({ subscriptionData: { data } }) {
-      const result = rooms.filter((room) => room.id !== data?.deleteRoom.id);
-      setRooms([...result]);
-    }
-  });
+  const rooms = useRooms();
 
   return (
     <div className="sidebar">

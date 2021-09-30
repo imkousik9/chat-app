@@ -5,6 +5,7 @@
 html {
   scroll-behavior: smooth;
   scrollbar-color: #ac277b white;
+  scrollbar-width: thin;
 }
 
 body {
@@ -22,11 +23,11 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 1em;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ac277b;
+  background: #c0318c;
   border-radius: 100vw;
 }
 

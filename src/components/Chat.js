@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
-import { useMutation, useQuery, useSubscription } from '@apollo/client';
-import { GET_MESSAGES } from '../graphql/queries';
+import { useMutation } from '@apollo/client';
+import useRoom from '../lib/hooks/useRoom';
+import useMessages from '../lib/hooks/useMessages';
 import { DELETE_ROOM, SEND_MESSAGE } from '../graphql/mutations';
-import { NEW_MESSAGE } from '../graphql/subscriptions';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import { useAuth } from '../store/StateProvider';
 
 import Message from './Message';
 import { Avatar, IconButton } from '@material-ui/core';
@@ -19,32 +20,25 @@ import './Chat.css';
 function Chat() {
   const [input, setInput] = useState('');
 
-  const [messages, setMessages] = useState([]);
-
-  const [addMessage] = useMutation(SEND_MESSAGE);
-  const [deleteRoom] = useMutation(DELETE_ROOM);
-
-  const { roomId, roomName } = useParams();
-  const history = useHistory();
-
-  useQuery(GET_MESSAGES, {
-    variables: { id: roomId },
-    onError: (err) => console.log(err),
-    onCompleted(data) {
-      setMessages(data?.messages);
-    }
+  const [addMessage] = useMutation(SEND_MESSAGE, {
+    onError: (err) => console.log(err)
+  });
+  const [deleteRoom] = useMutation(DELETE_ROOM, {
+    onError: (err) => console.log(err)
   });
 
-  useSubscription(NEW_MESSAGE, {
-    onSubscriptionData({ subscriptionData: { data } }) {
-      setMessages([...messages, data?.newMessage]);
-    }
-  });
+  const [{ user }] = useAuth();
+
+  const { roomId } = useParams();
+
+  const messages = useMessages(roomId);
+  const room = useRoom(roomId);
 
   const handleDelete = async () => {
     if (roomId) {
-      await deleteRoom({ variables: { id: roomId } });
-      history.replace('/');
+      await deleteRoom({
+        variables: { id: roomId }
+      });
     }
   };
 
@@ -53,8 +47,7 @@ function Chat() {
 
     if (roomId) {
       await addMessage({
-        variables: { message: input, roomId: roomId },
-        onError: (err) => console.log(err)
+        variables: { message: input, roomId: roomId }
       });
     }
 
@@ -66,7 +59,7 @@ function Chat() {
       <div className="chat__header">
         <Avatar src={`https://avatars.dicebear.com/api/human/${roomId}.svg`} />
         <div className="chat__headerInfo">
-          <h3>{roomName}</h3>
+          <h3>{room?.name}</h3>
           <p>
             {+messages[messages?.length - 1]?.createdAt
               ? formatDistance(
@@ -86,9 +79,14 @@ function Chat() {
           <IconButton>
             <AttachFileIcon />
           </IconButton>
-          <IconButton onClick={handleDelete} className="chat__headerRight--red">
-            <DeleteIcon />
-          </IconButton>
+          {user?.email === room?.user.email && (
+            <IconButton
+              onClick={handleDelete}
+              className="chat__headerRight--red"
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
         </div>
       </div>
       <ScrollToBottom className="chat__body">

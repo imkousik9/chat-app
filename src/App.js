@@ -95,7 +95,7 @@ function App() {
             </Modal>
             <Sidebar setOpen={setOpen} />
             <Switch>
-              <Route path="/room/:roomId/:roomName">
+              <Route path="/room/:roomId">
                 <Chat />
               </Route>
             </Switch>

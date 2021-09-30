@@ -1,32 +1,13 @@
-import { useState } from 'react';
-import { useQuery, useSubscription } from '@apollo/client';
-import { GET_MESSAGES } from '../graphql/queries';
-import { NEW_MESSAGE } from '../graphql/subscriptions';
 import { Link } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
+import useMessage from '../lib/hooks/useMessage';
 
 import { Avatar } from '@material-ui/core';
 
 import './SidebarChat.css';
 
 function SidebarChat({ id, name }) {
-  const [messages, setMessages] = useState([]);
-
-  useQuery(GET_MESSAGES, {
-    variables: { id: id },
-    onError: (err) => console.log(err),
-    onCompleted(data) {
-      if (id === data?.messages[data?.messages.length - 1]?.room?.id)
-        setMessages(data?.messages);
-    }
-  });
-
-  useSubscription(NEW_MESSAGE, {
-    onSubscriptionData({ subscriptionData: { data } }) {
-      if (id === data?.newMessage.room?.id)
-        setMessages([...messages, data?.newMessage]);
-    }
-  });
+  const messages = useMessage(id);
 
   function truncateString(str, num) {
     if (str.length > num) {
@@ -37,7 +18,7 @@ function SidebarChat({ id, name }) {
   }
 
   return (
-    <Link to={`/room/${id}/${name}`}>
+    <Link to={`/room/${id}`}>
       <div className="sidebarChat">
         <Avatar src={`https://avatars.dicebear.com/api/human/${id}.svg`} />
         <div className="sidebarChat__info">

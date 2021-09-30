@@ -12,8 +12,10 @@ export const ROOMS = gql`
 export const ROOM = gql`
   query GetRoom($id: ID) {
     room(id: $id) {
-      id
       name
+      user {
+        email
+      }
     }
   }
 `;

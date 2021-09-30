@@ -9,7 +9,7 @@ export const NEW_ROOM = gql`
   }
 `;
 
-export const DELETE_ROOM = gql`
+export const DELETE_ROOM_SUBSCRIPTION = gql`
   subscription DeleteRoom {
     deleteRoom {
       id
