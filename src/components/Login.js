@@ -42,6 +42,33 @@ function Login() {
     }
   };
 
+  const signInTest = async (e) => {
+    e.preventDefault();
+
+    const { data } = await logInUser({
+      variables: { email: 'admin@mail.com', password: '712407' }
+    });
+
+    if (data.login.user) {
+      const loginData = {
+        email: data?.login.user.email,
+        name: data?.login.user.name,
+        token: data?.login.user.token
+      };
+
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        user: loginData
+      });
+    } else if (data.login.errors) {
+      setError(data.login.errors[0].message);
+
+      dispatch({
+        type: 'LOGIN_FAIL'
+      });
+    }
+  };
+
   return (
     <div className="login">
       <h2>Sign In</h2>
@@ -67,6 +94,9 @@ function Login() {
         <p>{error}</p>
         <Button type="submit" disabled={loading}>
           Sign in
+        </Button>
+        <Button disabled={loading} onClick={signInTest}>
+          Sign in with test credentials
         </Button>
       </form>
       <p className="login__link">

@@ -65,4 +65,4 @@ After running the development server the site should be running on https://local
 <br>
 <b>Styling</b>: CSS and Material UI
 <br>
-<b>Deployment</b>: Netlify, heroku
+<b>Deployment</b>: Netlify, Render
